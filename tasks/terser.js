@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         var result = Terser.minify(src, options);
 
         if (result.error) {
-          grunt.logs.error(result.error);
+          grunt.log.error(result.error);
           return false;
         }
 
