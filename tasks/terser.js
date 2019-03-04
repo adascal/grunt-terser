@@ -20,6 +20,7 @@ module.exports = function(grunt) {
     function() {
       // Merge task-specific and/or target-specific options with these defaults.
       var options = this.options();
+      var createdFiles = 0;
 
       // Iterate over all specified file groups.
       this.files.forEach(function(f) {
@@ -60,9 +61,16 @@ module.exports = function(grunt) {
           grunt.file.write(options.sourceMap.filename, result.map);
         }
 
-        // Print a success message.
-        grunt.log.writeln('File "' + f.dest + '" created.');
+        // Print a success message for individual files only if grunt is run with --verbose flag
+        grunt.verbose.writeln('File "' + f.dest + '" created.');
+        
+        // Increment created files counter
+        createdFiles++;
       });
+
+      if (createdFiles > 0){
+          grunt.log.ok(`${createdFiles} grunt.util.pluralize(createdFiles, 'file/files') created.`);
+      }
     }
   );
 };
