@@ -55,9 +55,11 @@ module.exports = function(grunt) {
         // Write the destination file.
         grunt.file.write(f.dest, result.code);
 
-        if (options.sourceMap && options.sourceMap.filename) {
+        if (options.sourceMap) 
+		    {
+		      var mapFileName = options.sourceMap.filename ? options.sourceMap.filename : (f.dest + ".map")
           // Write the source map file.
-          grunt.file.write(options.sourceMap.filename, result.map);
+          grunt.file.write(mapFileName, result.map);
         }
 
         // Print a success message.
