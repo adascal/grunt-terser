@@ -9,6 +9,7 @@
 'use strict';
 
 var Terser = require('terser');
+var path = require("path");
 
 module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
@@ -34,11 +35,16 @@ module.exports = function(grunt) {
               return true;
             }
           })
-          .map(function(filepath) {
+          .reduce(function (sources, filepath) {
             // Read file source.
-            return grunt.file.read(filepath);
-          })
-          .join(';');
+            var destName = path.basename(f.dest);
+            var fileContent = grunt.file.read(filepath);
+            var sourceContent = sources[destName] ? sources[destName] + ';' + fileContent : fileContent;
+
+            return {
+              ...sources, [destName]: sourceContent
+            };
+          }, {});
 
         // Minify file code.
         var result = Terser.minify(src, options);
