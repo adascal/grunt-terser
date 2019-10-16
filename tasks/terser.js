@@ -37,12 +37,10 @@ module.exports = function(grunt) {
           })
           .reduce(function (sources, filepath) {
             // Read file source.
-            var destName = path.basename(f.dest);
             var fileContent = grunt.file.read(filepath);
-            var sourceContent = sources[destName] ? sources[destName] + ';' + fileContent : fileContent;
 
             return {
-              ...sources, [destName]: sourceContent
+              ...sources, [filepath]: fileContent
             };
           }, {});
 
