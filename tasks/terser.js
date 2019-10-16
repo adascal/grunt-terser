@@ -9,7 +9,6 @@
 'use strict';
 
 var Terser = require('terser');
-var path = require("path");
 
 module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
