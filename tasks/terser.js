@@ -35,11 +35,14 @@ module.exports = function(grunt) {
               return true;
             }
           })
-          .map(function(filepath) {
+          .reduce(function (sources, filepath) {
             // Read file source.
-            return grunt.file.read(filepath);
-          })
-          .join(';');
+            var fileContent = grunt.file.read(filepath);
+
+            return {
+              ...sources, [filepath]: fileContent
+            };
+          }, {});
 
         // Minify file code.
         var result = Terser.minify(src, options);
