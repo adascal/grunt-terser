@@ -1,7 +1,7 @@
 {
   "name": "grunt-terser",
   "description": "Grunt plugin for A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/adascal/grunt-terser",
   "author": {
     "name": "Alexandr Dascal",

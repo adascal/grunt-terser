@@ -35,13 +35,10 @@ module.exports = function(grunt) {
               return true;
             }
           })
-          .reduce(function (sources, filepath) {
-            // Read file source.
-            var fileContent = grunt.file.read(filepath);
+          .reduce(function(sources, filepath) {
+            sources[filepath] = grunt.file.read(filepath);
 
-            return {
-              ...sources, [filepath]: fileContent
-            };
+            return sources;
           }, {});
 
         // Minify file code.
@@ -59,22 +56,25 @@ module.exports = function(grunt) {
         // Write the destination file.
         grunt.file.write(f.dest, result.code);
 
-        if (options.sourceMap) 
-		    {
-		      var mapFileName = options.sourceMap.filename ? options.sourceMap.filename : (f.dest + ".map")
+        if (options.sourceMap) {
+          var mapFileName = options.sourceMap.filename
+            ? options.sourceMap.filename
+            : f.dest + '.map';
           // Write the source map file.
           grunt.file.write(mapFileName, result.map);
         }
 
         // Print a success message for individual files only if grunt is run with --verbose flag
         grunt.verbose.writeln('File "' + f.dest + '" created.');
-        
+
         // Increment created files counter
         createdFiles++;
       });
 
-      if (createdFiles > 0){
-          grunt.log.ok(`${createdFiles} grunt.util.pluralize(createdFiles, 'file/files') created.`);
+      if (createdFiles > 0) {
+        grunt.log.ok(
+          `${createdFiles} grunt.util.pluralize(createdFiles, 'file/files') created.`
+        );
       }
     }
   );
