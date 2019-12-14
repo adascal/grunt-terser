@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 
       if (createdFiles > 0) {
         grunt.log.ok(
-          `${createdFiles} grunt.util.pluralize(createdFiles, 'file/files') created.`
+          `${createdFiles} ${grunt.util.pluralize(createdFiles, 'file/files')} created.`
         );
       }
     }
