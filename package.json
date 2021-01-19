@@ -26,8 +26,8 @@
   "scripts": {
     "test": "grunt test"
   },
-  "dependencies": {
-    "terser": "^4.6.3"
+  "peerDependencies": {
+    "terser": "5.x"
   },
   "devDependencies": {
     "grunt": "^1.0.4",
