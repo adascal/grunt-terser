@@ -2,64 +2,51 @@
  * grunt-terser
  * https://github.com/adascal/grunt-terser
  *
- * Copyright (c) 2018 Alexandr Dascal
+ * Copyright (c) 2021 Alexandr Dascal
  * Licensed under the MIT license.
  */
 
-'use strict';
-
-module.exports = function(grunt) {
-
+module.exports = (grunt) => {
   // Project configuration.
   grunt.initConfig({
-    jshint: {
-      all: [
-        'Gruntfile.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
+    eslint: {
+      all: ['Gruntfile.js', 'tasks/*.js', '<%= nodeunit.tests %>'],
     },
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp']
+      tests: ['tmp'],
     },
 
     // Configuration to be run (and then tested).
     terser: {
       default_options: {
-        options: {
-        },
         files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
+          'tmp/default_options': ['test/fixtures/*.js'],
+        },
       },
       custom_options: {
         options: {
-          separator: ': ',
-          punctuation: ' !!!'
+          module: true,
+          sourceMap: true,
         },
         files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      }
+          'tmp/custom_options': ['test/fixtures/*.js'],
+        },
+      },
     },
 
     // Unit tests.
     nodeunit: {
-      tests: ['test/*_test.js']
-    }
-
+      tests: ['test/*_test.js'],
+    },
   });
 
   // Actually load this plugin's task(s).
   grunt.loadTasks('tasks');
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
@@ -67,7 +54,8 @@ module.exports = function(grunt) {
   // plugin's task(s), then test the result.
   grunt.registerTask('test', ['clean', 'terser', 'nodeunit']);
 
-  // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('lint', ['eslint']);
 
+  // By default, lint and run all tests.
+  grunt.registerTask('default', ['lint', 'test']);
 };
