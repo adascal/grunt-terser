@@ -7,6 +7,7 @@
  */
 
 const { minify } = require('terser');
+const { basename } = require('path');
 
 module.exports = (
   /**
@@ -52,8 +53,28 @@ module.exports = (
               {},
             );
 
+          let terserOptions = options;
+          let mapOutputFile = null;
+          if (options.sourceMap) {
+            mapOutputFile = options.sourceMap.filename
+              ? options.sourceMap.filename
+              : `${file.dest}.map`;
+
+            let mapUrl = null;
+            if (typeof options.sourceMap.url === 'string') {
+              mapUrl = basename(mapOutputFile);
+
+              if (options.sourceMap.url.length > 0) {
+                mapUrl = `${options.sourceMap.url}/${mapUrl}`;
+              }
+            }
+
+            terserOptions = { ...terserOptions };
+            terserOptions.sourceMap.url = mapUrl;
+          }
+
           // Minify file code.
-          const result = await minify(src, options);
+          const result = await minify(src, terserOptions);
 
           if (result.error) {
             grunt.log.error(result.error);
@@ -68,11 +89,8 @@ module.exports = (
           grunt.file.write(file.dest, result.code);
 
           if (options.sourceMap) {
-            const mapFileName = options.sourceMap.filename
-              ? options.sourceMap.filename
-              : `${file.dest}.map`;
             // Write the source map file.
-            grunt.file.write(mapFileName, result.map);
+            grunt.file.write(mapOutputFile, result.map);
           }
 
           // Print a success message for individual files only if grunt is run with --verbose flag
