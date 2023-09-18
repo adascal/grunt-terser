@@ -52,6 +52,10 @@ module.exports = (
               {},
             );
 
+          if(!Object.keys(src).length) {
+            grunt.log.warn(`No source files were found.`);
+            return false;
+          }
           // Minify file code.
           const result = await minify(src, options);
 
